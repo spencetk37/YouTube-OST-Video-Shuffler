@@ -59,29 +59,34 @@ def search_line_for_stamp(line:str):
        return handle_timestamp(m.group(0))
     return None
 
+def list_songs(times):
+    for i, (k,_) in enumerate(times.items()):
+        print(f'{i}. {k}')
+
 def play_url(driver, url, times):
     driver.get(url)
 
     l = []
 
     for i, (k,v) in enumerate(times.items()):
-        print(f'{i}. {k}')
         l.append(k)
 
-    print('q - QUIT, s - SHUFFLE')
+    print('q - QUIT, s - SHUFFLE, l - LIST')
 
 
     while True:
         song = input(f'index of song [0:{len(times) - 1}]: ')
         if song == 'q':
             break
+        elif song =='l':
+            list_songs(times)
 
         else:
             my_list = [song]
             if song == 's':
                 my_list = list(range(0,len(times) - 1))
                 random.shuffle(my_list)
-                print(f'playing {my_list}')
+                print(f'playing order: {my_list}')
 
             for x in my_list:
                 key = l[int(x)]
