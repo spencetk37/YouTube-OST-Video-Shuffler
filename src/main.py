@@ -1,7 +1,7 @@
 import yt_dlp
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-import datetime, re
+import datetime, re, random, time
 
 # Get Full Description from YouTube video
 def get_description(url):
@@ -68,16 +68,28 @@ def play_url(driver, url, times):
         print(f'{i}. {k}')
         l.append(k)
 
+    print('q - QUIT, s - SHUFFLE')
+
 
     while True:
         song = input(f'index of song [0:{len(times) - 1}]: ')
         if song == 'q':
             break
 
-        key = l[int(song)]
-        second = times[key]
-        new_url = f'{url}&t={int(second.total_seconds())}s'
-        driver.get(new_url)
+        else:
+            my_list = [song]
+            if song == 's':
+                my_list = list(range(0,len(times) - 1))
+                random.shuffle(my_list)
+                print(f'playing {my_list}')
+
+            for x in my_list:
+                key = l[int(x)]
+                second = times[key]
+                new_url = f'{url}&t={int(second.total_seconds())}s'
+                driver.get(new_url)
+                #ignores ads
+                time.sleep(int(second.total_seconds()))
         
 
 def main():
